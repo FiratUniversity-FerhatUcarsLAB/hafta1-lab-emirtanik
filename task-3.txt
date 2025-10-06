@@ -2,6 +2,7 @@
 AD-SOYAD:Muhammed Emir Tanık
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz: SINIF NOTLARINI YÜKSEKTEN DÜŞÜĞE SIRALAMA
+
 VERİLEN PROMPTU YAZDIM ARDINDAN BİR PSEUDOCODE ALDIM AŞŞAĞIDA YAZAN ÖZELLİKLERİ BEN SORARAK EKLETTİM
 
 1 Sınıf notlarını yüksekten düşüğe sıralama
