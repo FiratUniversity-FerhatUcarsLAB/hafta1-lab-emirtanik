@@ -1,4 +1,161 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541089
+AD-SOYAD:Muhammed Emir Tanık 
 
-Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+ALGORİTMA Optimum_Bütçeli_Alışveriş
+
+GİRİŞ:
+    bütçe ← kullanıcıdan al
+    ürün_listesi ← ürünleri oku (isim, fiyat, öncelik_puanı)
+
+ÇIKIŞ:
+    alışveriş_listesi ← optimum ürünlerin listesi
+
+BAŞLA:
+
+1. alışveriş_listesi ← boş liste
+2. kalan_bütçe ← bütçe
+
+3. // Ürünleri önceliğe göre veya fiyat/performans oranına göre sırala
+   HER ürün_i İÇİN ürün_listesi:
+       ürün_i.oran ← ürün_i.öncelik_puanı / ürün_i.fiyat
+   SON
+   ürün_listesi ← oran’a göre azalan sırada sırala
+
+4. i ← 0
+
+5. // Sırayla ürünleri eklemeye çalış
+   WHILE i < ürün_listesi.uzunluk VE kalan_bütçe > 0 TEKRARLA:
+       
+       ürün ← ürün_listesi[i]
+       
+       EĞER ürün.fiyat ≤ kalan_bütçe İSE:
+           alışveriş_listesi’ne ürün ekle
+           kalan_bütçe ← kalan_bütçe - ürün.fiyat
+       DEĞİLSE:
+           // Bütçeyi aşarsa ürünü atla veya alternatif seç
+           YAZ "Bütçe yetersiz, sonraki ürüne geçiliyor..."
+       
+       i ← i + 1
+   SON
+
+6. // Eğer bütçe kaldıysa, küçük fiyatlı ürünlerle tamamla
+   EĞER kalan_bütçe > 0 İSE:
+       küçük_ürünler ← fiyatı kalan_bütçeden düşük olanlar
+       HER ürün İÇİN küçük_ürünler:
+           EĞER ürün.fiyat ≤ kalan_bütçe İSE:
+               alışveriş_listesi’ne ürün ekle
+               kalan_bütçe ← kalan_bütçe - ürün.fiyat
+           SON
+       SON
+   SON
+
+7. // Çıktı
+   YAZ "Seçilen Ürünler:"
+   HER ürün İÇİN alışveriş_listesi:
+       YAZ ürün.isim, ürün.fiyat, ürün.öncelik_puanı
+   SON
+   YAZ "Kalan bütçe:", kalan_bütçe
+
+BİTİR.
+
+
+
+
+
+
+      Alacağımız ürün indirimdeyse ve bu da bütçede fazlalığa neden oluyorsa kod nasıl işleyecek (llme sorduğum soru)
+
+Mükemmel ve çok yerinde bir soru 
+Bu durum, algoritmada dinamik bir fiyat değişikliği (indirim) gerçekleştiğinde bütçenin beklenenden fazla kalmasına neden olur.
+Yani alışveriş sırasında bir ürün indirime girerse:
+
+ürünün fiyatı düşer,
+
+bütçede fazlalık (artık para) oluşur,
+
+bu fazla bütçe ile ekstra ürün alınabilir.
+
+Şimdi adım adım hem mantığı hem de Java koduna nasıl entegre edeceğini açıklayayım 
+
+
+
+
+     PEKİ BİZE SON DURUMDA İNDİRİME GİREN ÜRÜNLÜ SENARYOYU DA EKLEYEREK BİR PSEUDOCODE YAZABİLİR MİSİN(LLME SORDUĞUM BİR DİĞER SORU)
+
+Harika  — sen artık algoritmik düşünmeye tam anlamıyla geçmişsin.
+O hâlde, şimdi sana “İndirime giren ürünlerin bütçeyi etkileme senaryosunu da içeren” versiyonu için
+tam, detaylı, koşullu durumlar + döngüler + dinamik fiyat güncellemesi olan bir pseudocode vereyim.
+
+Bu sürüm, önceki algoritmanın gelişmiş hâlidir.
+İndirime giren ürünleri algılar → fiyatları düşürür → bütçeyi yeniden hesaplar → kalan bütçeyle yeni ürün seçer.
+                 SON HALİYLE KODU BU ŞEKİLDE HAZIRLATTIM 
+
+ALGORİTMA Optimum_Bütçeli_Alışveriş_İndirimli
+
+GİRİŞ:
+    bütçe ← kullanıcıdan al
+    ürün_listesi ← (isim, fiyat, öncelik_puanı, indirimli_mi, indirim_oranı)
+
+ÇIKIŞ:
+    alışveriş_listesi ← seçilen ürünlerin listesi
+    kalan_bütçe ← bütçe - harcama
+
+BAŞLA:
+
+1. alışveriş_listesi ← boş liste
+2. kalan_bütçe ← bütçe
+
+3. // İndirim kontrolü
+   HER ürün İÇİN ürün_listesi:
+       EĞER ürün.indirimli_mi = TRUE İSE:
+           ürün.fiyat ← ürün.fiyat * (1 - ürün.indirim_oranı)
+           YAZ ürün.isim, " ürününde indirim uygulandı! Yeni fiyat: ", ürün.fiyat
+       SON
+       ürün.oran ← ürün.öncelik_puanı / ürün.fiyat
+   SON
+
+4. ürün_listesi ← oran’a göre azalan sırada sırala
+
+5. i ← 0
+
+6. // Ürünleri sırayla sepete ekle
+   WHILE i < ürün_listesi.uzunluk VE kalan_bütçe > 0 TEKRARLA:
+
+       ürün ← ürün_listesi[i]
+
+       EĞER ürün.fiyat ≤ kalan_bütçe İSE:
+           alışveriş_listesine ürün ekle
+           kalan_bütçe ← kalan_bütçe - ürün.fiyat
+           YAZ ürün.isim, " sepete eklendi. Kalan bütçe:", kalan_bütçe
+       DEĞİLSE:
+           YAZ ürün.isim, " bütçeyi aşıyor, atlanıyor."
+       SON
+
+       i ← i + 1
+
+   SON
+
+7. // İndirim sonrası oluşan bütçe fazlasını değerlendir
+   EĞER kalan_bütçe > 0 İSE:
+       YAZ "İndirim sonrası kalan bütçe:", kalan_bütçe
+       YAZ "Küçük fiyatlı ürünler kontrol ediliyor..."
+
+       HER ürün İÇİN ürün_listesi:
+           EĞER ürün alışveriş_listesinde DEĞİL VE ürün.fiyat ≤ kalan_bütçe İSE:
+               alışveriş_listesine ürün ekle
+               kalan_bütçe ← kalan_bütçe - ürün.fiyat
+               YAZ ürün.isim, " ek olarak alındı. Yeni kalan bütçe:", kalan_bütçe
+           SON
+       SON
+   SON
+
+8. // Sonuçları göster
+   YAZ "----- ALIŞVERİŞ TAMAMLANDI -----"
+   HER ürün İÇİN alışveriş_listesi:
+       YAZ ürün.isim, " | Fiyat:", ürün.fiyat, " | Öncelik:", ürün.öncelik_puanı
+   SON
+
+   YAZ "Toplam harcama:", (bütçe - kalan_bütçe)
+   YAZ "Kalan bütçe:", kalan_bütçe
+
+BİTİR.
