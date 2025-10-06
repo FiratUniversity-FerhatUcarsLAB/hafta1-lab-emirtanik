@@ -1,4 +1,96 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541089
+AD-SOYAD:Muhammed Emir Tanık
 
-Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:ALGORİTMAM SUDOKU ÇÖZME YAKLAŞIMI 
+
+GİRİŞ:
+    sudoku[9][9]  // 0 boş hücreyi temsil eder
+
+ÇIKIŞ:
+    sudoku çözülmüş (geçerli sudoku tahtası)
+
+BAŞLA:
+
+1. FONKSİYON sudokuCoz(sudoku):
+    
+    // 1. Boş hücre ara
+    POZISYON ← bosHucreBul(sudoku)
+    
+    EĞER POZISYON yoksa:
+        // Hiç boş hücre kalmadıysa sudoku çözülmüştür
+        GERİ_DÖN TRUE
+    SON
+
+    satir ← POZISYON.x
+    sutun ← POZISYON.y
+
+    // 2. 1’den 9’a kadar sayı dene
+    FOR sayi ← 1'DEN 9'A:
+        
+        // 3. Eğer sayı bu hücreye yerleştirilebilir mi?
+        EĞER gecerliMi(sudoku, satir, sutun, sayi) İSE:
+            
+            sudoku[satir][sutun] ← sayi
+
+            // 4. Sonraki hücreyi çözmeyi dene (recursive çağrı)
+            EĞER sudokuCoz(sudoku) İSE:
+                GERİ_DÖN TRUE
+            SON
+
+            // 5. Eğer olmadıysa, geri al (backtrack)
+            sudoku[satir][sutun] ← 0
+        SON
+    SON_FOR
+
+    // 6. Hiçbir sayı işe yaramadıysa çözüm bulunamadı
+    GERİ_DÖN FALSE
+
+SON_FONKSİYON
+
+2. FONKSİYON bosHucreBul(sudoku):
+    FOR i ← 0'DAN 8'E:
+        FOR j ← 0'DAN 8'E:
+            EĞER sudoku[i][j] = 0 İSE:
+                GERİ_DÖN (i, j)
+            SON
+        SON
+    SON
+    GERİ_DÖN YOK  // Boş hücre kalmadıysa
+SON_FONKSİYON
+
+3. FONKSİYON gecerliMi(sudoku, satir, sutun, sayi):
+    // Satır kontrolü
+    FOR j ← 0'DAN 8'E:
+        EĞER sudoku[satir][j] = sayi İSE:
+            GERİ_DÖN FALSE
+        SON
+    SON
+
+    // Sütun kontrolü
+    FOR i ← 0'DAN 8'E:
+        EĞER sudoku[i][sutun] = sayi İSE:
+            GERİ_DÖN FALSE
+        SON
+    SON
+
+    // 3x3 kutu kontrolü
+    kutuSatir ← (satir / 3) * 3
+    kutuSutun ← (sutun / 3) * 3
+
+    FOR i ← 0'DAN 2'YE:
+        FOR j ← 0'DAN 2'YE:
+            EĞER sudoku[kutuSatir + i][kutuSutun + j] = sayi İSE:
+                GERİ_DÖN FALSE
+            SON
+        SON
+    SON
+
+    GERİ_DÖN TRUE
+SON_FONKSİYON
+
+4. // Ana program
+   sudokuCoz(sudoku)
+   sudoku tahtasını ekrana yaz
+
+BİTİR.
+
