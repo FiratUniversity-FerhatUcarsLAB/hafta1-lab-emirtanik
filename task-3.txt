@@ -1,4 +1,113 @@
 Öğrenci No:
 AD-SOYAD:
 
-Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz: SINIF NOTLARINI YÜKSEKTEN DÜŞÜĞE SIRALAMA
+VERİLEN PROMPTU YAZDIM ARDINDAN BİR PSEUDOCODE ALDIM AŞŞAĞIDA YAZAN ÖZELLİKLERİ BEN SORARAK EKLETTİM
+
+1 Sınıf notlarını yüksekten düşüğe sıralama
+
+2 Sınava girmeyen öğrencileri sona atma
+
+3 Eşit notlarda alfabetik sıralama
+
+4 Listeyi güncelleme / öğrenciyi çıkartma (soft veya hard delete)
+
+ARDINDAN ALDIĞIM PSEUDOCODE
+
+ALGORİTMA OgrenciNotlariYonetimi
+
+GİRİŞ:
+    ogrenciListesi[]  // her öğrenci: (id, isim, not, aktif)
+
+ÇIKIŞ:
+    siraliOgrenciListesi[]  // yüksekten düşüğe sıralı, sınava girmeyenler sonda
+
+BAŞLA:
+
+1. // 1. Not sıralama
+   n ← ogrenciListesi.length
+
+   FOR i ← 0'DAN n-2'E:
+       FOR j ← 0'DAN n-i-2'E:
+
+           s1 ← ogrenciListesi[j]
+           s2 ← ogrenciListesi[j+1]
+
+           // 1.a. Sadece aktif öğrencilerle karşılaştır
+           EĞER s1.aktif = FALSE VEYA s2.aktif = FALSE İSE:
+               CONTINUE  // pas geç
+           SON
+
+           // 1.b. Sınava girmeyenler sona
+           EĞER s1.not = null VEYA s1.not < 0 İSE:
+               swap s1 ↔ s2
+               CONTINUE
+           SON
+           EĞER s2.not = null VEYA s2.not < 0 İSE:
+               CONTINUE
+           SON
+
+           // 1.c. Normal sıralama: yüksekten düşüğe
+           EĞER s1.not < s2.not İSE:
+               swap s1 ↔ s2
+           DEĞİLSE EĞER s1.not = s2.not İSE:
+               // eşit not → alfabetik isim
+               EĞER s1.isim > s2.isim İSE:
+                   swap s1 ↔ s2
+               SON
+           SON
+
+       SON_FOR
+   SON_FOR
+
+2. // 2. Öğrenci çıkarma fonksiyonu
+   FONKSİYON removeStudent(anahtar, anahtarTipi, removeAll, softDelete):
+       removedCount ← 0
+       i ← 0
+       WHILE i < ogrenciListesi.length:
+           ogrenci ← ogrenciListesi[i]
+           eşleşme ← FALSE
+
+           IF anahtarTipi = "id" VE ogrenci.id = anahtar THEN eşleşme ← TRUE
+           ELSE IF anahtarTipi = "isim" VE ogrenci.isim = anahtar THEN eşleşme ← TRUE
+
+           IF eşleşme THEN
+               IF softDelete THEN
+                   ogrenci.aktif ← FALSE
+                   removedCount ← removedCount + 1
+                   i ← i + 1
+               ELSE
+                   remove ogrenciListesi[i]
+                   removedCount ← removedCount + 1
+                   IF NOT removeAll THEN BREAK
+               SON
+           ELSE
+               i ← i + 1
+           SON
+       END_WHILE
+       // Sıralamayı tekrar yap (aktifler ve notlar)
+       SIRALA ogrenciListesi
+       GERİ_DÖN removedCount
+   END_FONKSİYON
+
+3. // 3. Sonuçları yazdır
+   YAZ "Sıralanmış ve güncellenmiş öğrenciler listesi:"
+   HER ogrenci İÇİN ogrenciListesi[]:
+       YAZ ogrenci.id, ogrenci.isim, ogrenci.not, (ogrenci.aktif ? "Aktif" : "Çıkarıldı")
+   SON
+
+BİTİR.
+
+
+
+🔹 Pseudocode Açıklaması
+
+Sıralama mantığı: yüksekten düşüğe, eşit not → alfabetik isim, sınava girmeyenler sona.
+
+Soft delete / Hard delete: öğrenciyi listeden çıkarmak için seçenek sunar.
+
+Aktif kontrolü: sadece aktif öğrenciler sıralamaya dahil edilir.
+
+Tekrar eden işlemler: döngüler (FOR, WHILE) ve karşılaştırmalar (IF) ile işlenir.
+
+Dinamik güncelleme: bir öğrenci çıkarıldıktan sonra liste yeniden sıralanır.
