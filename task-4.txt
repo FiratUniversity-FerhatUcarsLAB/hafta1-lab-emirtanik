@@ -1,4 +1,101 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541089
+AD-SOYAD:Muhammed Emir Tanık
 
-Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz: OTOBÜS ROTASI OPTİMİZASYONU
+BAŞTA VERİLEN PROMPTU VERDİM SONRASINDA ELLİ  KOŞULLAR EKLEDİM 
+KAZA DURUMUNDA YOLUN KAPANMASI 
+YOLDA YOĞUN TRAFİK DURUMU 
+EN AZ YAKITLA EN FAZLA VERİMİ ALMA
+ŞOFÖR İNSİYATİFİNDE YOLDAN SAPMASI BENZERİ
+
+
+ALGORİTMA OtobusRotaOptimizasyonu
+
+GİRİŞ:
+    duraklar[]               // her durak: isim, kapalı mı?, trafik katsayısı
+    mesafeler[][]            // duraklar arası mesafeler
+    baslangicDurağı          // otobüsün başladığı durak
+
+ÇIKIŞ:
+    enIyiRota[]              // optimize edilmiş rota
+    toplamMesafe             // trafik dahil toplam mesafe
+
+BAŞLA:
+
+1. Başlangıç:
+    currentLocation ← baslangicDurağı
+    ziyaretEdilen ← boş liste
+    toplamMesafe ← 0
+    currentLocation.visited ← true
+    enIyiRota.add(currentLocation)
+
+2. Tüm duraklar ziyaret edilene kadar:
+    
+    // Şoför insiyatifini kontrol et
+    currentLocation ← Sürücünün gerçek konumu (gerekirse rota güncelle)
+
+    minMesafe ← sonsuz
+    enIyiSecim ← null
+
+    FOR her durak d ∈ duraklar:
+        
+        // 2.a. Ziyaret edilmemiş, açık ve kullanılabilir duraklar
+        IF d ∉ ziyaretEdilen AND d.closed = false THEN
+
+            // 2.b. Trafik etkisi
+            trafikKatsayisi ← d.trafficMultiplier
+            mesafeEfektif ← mesafeler[currentLocation][d] * trafikKatsayisi
+
+            // 2.c. Eğer yol kaza nedeniyle kapalı ise atla
+            IF yoldaKazaVar(currentLocation, d) THEN
+                CONTINUE
+            ENDIF
+
+            // 2.d. En uygun durak seçimi
+            IF mesafeEfektif < minMesafe THEN
+                minMesafe ← mesafeEfektif
+                enIyiSecim ← d
+            ENDIF
+        ENDIF
+    ENDFOR
+
+    // 2.e. Eğer gidilebilecek durak yoksa
+    IF enIyiSecim = null THEN
+        // Backtracking, bekleme veya alternatif rota düzeltme
+        rotaDuzelt veya bekle
+    ELSE
+        enIyiRota.add(enIyiSecim)
+        toplamMesafe ← toplamMesafe + minMesafe
+        enIyiSecim.visited ← true
+        currentLocation ← enIyiSecim
+    ENDIF
+
+END_WHILE
+
+3. Gerekirse başlangıç noktasına geri dön:
+    toplamMesafe ← toplamMesafe + mesafeler[currentLocation][baslangicDurağı]
+    enIyiRota.add(baslangicDurağı)
+
+4. Çıktı:
+    YAZ "Optimum Rota:", enIyiRota
+    YAZ "Toplam Mesafe (trafik dahil):", toplamMesafe
+
+BİTİR
+
+Koşullu durumlar:
+
+Durak açık mı (closed=false)
+Yolda kaza var mı
+Trafik yoğunluğu (trafficMultiplier)
+
+Tekrarlayan işlemler:
+Döngü ile tüm durakları ziyaret etme
+Her adımda en uygun sonraki durak seçimi
+
+Şoför insiyatifi:currentLocation her adımda şoförün gerçek konumuna göre güncellenebilir
+Sistem rotayı dinamik olarak yeniden optimize eder
+
+Amaç:
+Toplam mesafeyi minimize etmek
+Tüm durakları ziyaret etmek
+Kaza ve trafik gibi gerçek durumları dikkate almak
