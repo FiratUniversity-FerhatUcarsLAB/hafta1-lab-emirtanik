@@ -1,4 +1,83 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541089
+AD-SOYAD:Muhammed Emir Tanık
 
-Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz: Hava durumuna göre kıyafet seçen bir algoritma yapmasını istedim 
+Fakat buna bazı eklemeler ekledim 
+Önerdiği kıyafetin kirli olması
+Hava durumunu kullanıcı eklemesi yerine veritabanından bilgiyi alma 
+Her gün sabah 7de kullanıcının teknolojik aletine bildirim yollaması 
+
+
+// SABAH 07:00'DE ÇALIŞACAK ZAMANLAYICI
+ZAMANLAYICI(her_gün_saat_07:00) {
+
+    şehir = "İstanbul" // veya kullanıcının konumu
+    tarih = BUGÜNÜN_TARİHİ()
+
+    // Veritabanına bağlan
+    bağlan(veritabani)
+
+    // Hava durumu verisini al
+    sorgu = "SELECT sıcaklık, yağmur, rüzgar, zaman FROM hava_durumu WHERE şehir = şehir AND tarih = tarih"
+    sonuç = veritabanından_sorgula(sorgu)
+
+    EĞER sonuç BOŞSA
+        bildirim_gönder("Bugün için hava verisi bulunamadı.")
+        ÇIKIŞ
+
+    // Verileri al
+    sıcaklık = sonuç.sıcaklık
+    yagmur_var_mi = sonuç.yağmur
+    ruzgar_var_mi = sonuç.rüzgar
+    zaman = sonuç.zaman
+
+    // Temiz kıyafet listesi
+    temiz_kıyafetler = ["mont", "ceket", "kazak", "tişört", "yağmurluk", "şemsiye", "atkı", "bere"]
+    önerilen_kıyafet = ""
+
+    // Sıcaklığa göre kıyafet seç
+    EĞER sıcaklık < 5 İSE
+        önerilen_kıyafet = "mont"
+    YOKSA EĞER sıcaklık < 15 İSE
+        önerilen_kıyafet = "ceket"
+    YOKSA EĞER sıcaklık < 25 İSE
+        önerilen_kıyafet = "kazak"
+    YOKSA
+        önerilen_kıyafet = "tişört"
+
+    mesaj = ""
+
+    // Temizlik kontrolü
+    EĞER önerilen_kıyafet temiz_kıyafetler içinde YOKSA
+        mesaj = önerilen_kıyafet + " kirli. Alternatif aranıyor...\n"
+        EĞER "kazak" temiz_kıyafetler içinde
+            mesaj += "Alternatif olarak kazak giyebilirsin.\n"
+        DEĞİLSE
+            mesaj += "Temiz kıyafet bulunamadı, yıkama gerekebilir.\n"
+    DEĞİLSE
+        mesaj = "Bugün " + önerilen_kıyafet + " giyebilirsin.\n"
+
+    // Yağmur kontrolü
+    EĞER yagmur_var_mi == "evet" İSE
+        EĞER "yağmurluk" temiz_kıyafetler içinde
+            mesaj += "Yağmurluk almayı unutma.\n"
+        DEĞİLSE
+            mesaj += "Yağmurluk kirli. Şemsiye al.\n"
+
+    // Rüzgar kontrolü
+    EĞER ruzgar_var_mi == "evet" İSE
+        mesaj += "Rüzgarlık veya kapüşonlu giysi tercih et.\n"
+
+    // Zaman bilgisine göre uyarı
+    EĞER zaman == "sabah" VE sıcaklık < 20 İSE
+        mesaj += "Sabahları serin olabilir, fazladan kat giy.\n"
+    EĞER zaman == "akşam" VE sıcaklık < 18 İSE
+        mesaj += "Akşamları serin olabilir, hırka al.\n"
+
+    // Bildirim gönder
+    bildirim_gönder(mesaj)
+
+}// ZAMANLAYICI SONU 
+
+
+
